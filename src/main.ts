@@ -23,6 +23,8 @@ async function bootstrap() {
   
   await app.listen(envs.PORT);
 
+  console.log("Hello world - first change")
+
   logger.log("Gateway runnin on port " + envs.PORT);
 }
 bootstrap();
