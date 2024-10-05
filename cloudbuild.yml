@@ -1,0 +1,19 @@
+steps:
+- name: 'gcr.io/cloud-builders/docker'
+  entrypoint: 'bash'
+  args:
+    - -c
+    - |
+      docker build -t us-east4-docker.pkg.dev/pivotal-data-437717-t8/image-registry/client-gateway \
+      -f dockerfile.prod \
+      --platform=linux/amd64 .
+  secretEnv: []
+
+- name: 'gcr.io/cloud-builders/docker'
+  args:
+    [
+      'push',
+      'us-east4-docker.pkg.dev/pivotal-data-437717-t8/image-registry/client-gateway',
+    ]
+options:
+  logging: CLOUD_LOGGING_ONLY
