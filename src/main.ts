@@ -1,7 +1,7 @@
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { envs } from './config';
-import { Logger, ValidationPipe } from '@nestjs/common';
+import { Logger, RequestMethod, ValidationPipe } from '@nestjs/common';
 import { RpcCustomExceptionFilter } from './common/index';
 
 async function bootstrap() {
@@ -10,7 +10,12 @@ async function bootstrap() {
 
   const app = await NestFactory.create(AppModule);
 
-  app.setGlobalPrefix("api");
+  app.setGlobalPrefix("api", {
+    exclude: [{
+      path: "",
+      method: RequestMethod.GET
+    }],
+  });
   app.useGlobalPipes(
     new ValidationPipe({
       whitelist: true,
@@ -22,6 +27,8 @@ async function bootstrap() {
   app.useGlobalFilters( new RpcCustomExceptionFilter())
   
   await app.listen(envs.PORT);
+
+  console.log("Health check added");
 
   logger.log("Gateway runnin on port " + envs.PORT);
 }
